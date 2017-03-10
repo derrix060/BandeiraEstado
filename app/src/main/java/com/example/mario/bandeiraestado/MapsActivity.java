@@ -47,8 +47,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         txtView = (TextView) this.findViewById(R.id.textView);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
+
         //initialize seek bar
-        //initializeSeekBar();
+        initializeSeekBar();
     }
 
 
@@ -138,7 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void changeMap (){
         if (states.size()!= 0){
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(states.get(actualStateIndex), 3f));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(states.get(actualStateIndex), seekBar.getProgress() + 1));
             txtView.setText(statesName.get(actualStateIndex));
         }
         else{
@@ -146,12 +147,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    /*
+
     private void initializeSeekBar(){
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(i), 1000, null);
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(i + 1), 100, null);
             }
 
             @Override
@@ -165,5 +166,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-    */
 }
