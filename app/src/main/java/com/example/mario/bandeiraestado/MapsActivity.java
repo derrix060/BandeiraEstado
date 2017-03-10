@@ -28,6 +28,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
 
     List<LatLng> states = new ArrayList<>();
+    List<String> statesName = new ArrayList<>();
+
     int actualStateIndex = 0;
     TextView txtView;
     SeekBar seekBar;
@@ -99,10 +101,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         estados.put("TO", new LatLng(-48.251953,-10.746969));
     */
 
-        states = new ArrayList<>(estados.values());
-        //states.addAll(estados.values());
-
         for (Map.Entry<String, LatLng> state : estados.entrySet()){
+            statesName.add(state.getKey());
+            states.add(state.getValue());
+
             mMap.addMarker(new MarkerOptions()
                     .position(state.getValue())
                     .title(state.getKey()));
@@ -126,17 +128,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void backState(View v){
-        if (actualStateIndex == 0) 
+        if (actualStateIndex == 0)
             actualStateIndex = states.size()-1;
         else
             actualStateIndex --;
+
         changeMap();
     }
 
     private void changeMap (){
         if (states.size()!= 0){
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(states.get(actualStateIndex), 3f));
-            txtView.setText("Index: " + actualStateIndex);
+            txtView.setText(statesName.get(actualStateIndex));
         }
         else{
             Toast.makeText(this, "Don't have any state!", Toast.LENGTH_LONG);
