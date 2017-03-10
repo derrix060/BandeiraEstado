@@ -126,7 +126,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void backState(View v){
-        actualStateIndex = (actualStateIndex + states.size()) % (states.size() + 1);
+        if (actualStateIndex == 0) 
+            actualStateIndex = states.size()-1;
+        else
+            actualStateIndex --;
         changeMap();
     }
 
