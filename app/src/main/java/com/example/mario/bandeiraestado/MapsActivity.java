@@ -1,8 +1,9 @@
 package com.example.mario.bandeiraestado;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.text.method.Touch;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -16,10 +17,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -71,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void populateMap(){
-        // String IMAGE_PATH = "./icons/";
+        String IMAGE_PATH = "./icons/";
 
         Map<String, LatLng> estados = new HashMap<>();
 
@@ -106,17 +110,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             statesName.add(state.getKey());
             states.add(state.getValue());
 
+            //Bitmap image = getBitmapFromURL("https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png");
+
             mMap.addMarker(new MarkerOptions()
                     .position(state.getValue())
                     .title(state.getKey()));
                     //.icon(BitmapDescriptorFactory
-                    //        .fromPath(IMAGE_PATH + state.getKey() + ".png")));
+                    //        .fromBitmap(image)));
 
 
         }
 
         // Move Camera
         nextState();
+    }
+
+    public Bitmap getBitmapFromURL(String src) {
+        Toast.makeText(this, "passei", Toast.LENGTH_SHORT).show();
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            // Log exception
+            return null;
+        }
     }
 
     public void nextStateBtn(View v) {
